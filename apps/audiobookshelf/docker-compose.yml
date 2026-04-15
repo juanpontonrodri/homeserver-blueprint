@@ -1,0 +1,19 @@
+version: '3.8'
+services:
+  audiobookshelf:
+    image: ghcr.io/advplyr/audiobookshelf:latest
+    container_name: audiobookshelf
+    ports:
+      - 13378:80
+      - 13379:443
+    environment:
+      - TZ=Europe/Madrid
+      - AUDIOBOOKSHELF_UID=1000
+      - AUDIOBOOKSHELF_GID=1000
+    volumes:
+      - /media/audiolibros:/audiobooks
+      - /media/libros:/books
+      - /media/podcasts:/podcasts
+      - /media/torrents/readarr:/torrents/readarr
+      - ./config:/config
+    restart: unless-stopped

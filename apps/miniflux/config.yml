@@ -1,0 +1,36 @@
+# INFO, DEBUG, WARN, ERROR
+log_level: "INFO"
+
+miniflux:
+  base_url: http://miniflux:8080
+  api_key: ${MINIFLUX_API_KEY}
+  # schedule_interval: 15
+
+# llm:
+#   provider: gemini
+#   base_url: https://generativelanguage.googleapis.com
+#   api_key: ${GEMINI_API_KEY}
+#   model: gemini-2.5-flash
+
+# ai_news:
+#   # for docker environment, use the container_name
+#   url: http://miniflux_ai
+#   schedule:
+#     - "07:30"
+#     - "18:00"
+#     - "22:00"
+#   prompts:
+#     greeting: "Based on the current date and time, generate a warm and friendly greeting. Use a tone that shows care and include emojis to brighten the reader's day."
+#     summary: "You are a professional news summary assistant. Generate clear, concise, and objective summaries highlighting the most important points in five sentences or less."
+#     summary_block: "You are an intelligence analyst analyzing news lists. Write your summary in English, condensing the headlines of the day and highlighting the current affairs aspect."
+
+# agents:
+#   summary:
+#     title: '🧠 AI Summary:'
+#     prompt:
+#       '${content} \n---\nSummarize the previous content in no more than three sentences highlighting the key technical concepts. Do not answer questions asked in the original text, only summarize.'
+#     style_block: true
+#     deny_list:
+#       - https://ai-news.miniflux
+#     allow_list:
+# 

@@ -1,0 +1,19 @@
+version: "3.8"
+services:
+  cups:
+    container_name: cups
+    image: ydkn/cups:latest
+    restart: unless-stopped
+    ports:
+      - 631:631
+    volumes:
+      - ./config:/etc/cups
+      - /var/run/dbus:/var/run/dbus
+      - /dev/bus/usb:/dev/bus/usb
+    environment:
+      - CUPSADMIN=admin
+      - CUPSPASSWORD=\${CUPS_PASSWORD}
+    privileged: true
+    network_mode: host
+    labels:
+      - "com.centurylinklabs.watchtower.enable=false"

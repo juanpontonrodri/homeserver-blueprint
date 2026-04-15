@@ -1,0 +1,17 @@
+version: "3.7"
+services:
+  sonarr:
+    image: lscr.io/linuxserver/bazarr:latest
+    container_name: bazarr
+    ports:
+      - 6767:6767
+    volumes:
+      - ./config:/config 
+      - /media:/media
+    environment:
+      TZ: Europe/Madrid
+      PUID: 1000
+      PGID: 1000
+      UMASK: 002
+
+    restart: unless-stopped

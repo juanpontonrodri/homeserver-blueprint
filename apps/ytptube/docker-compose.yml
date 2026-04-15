@@ -1,0 +1,13 @@
+services:
+  ytptube:
+    user: 1000:1000 # change this to your user id and group id, for example: "1000:1000"
+    image: ghcr.io/arabcoders/ytptube:latest
+    container_name: ytptube
+    restart: unless-stopped
+    ports:
+      - "8081:8081"
+    volumes:
+      - ./config:/config:rw
+      - ./downloads:/downloads:rw
+    tmpfs:
+      - /tmp

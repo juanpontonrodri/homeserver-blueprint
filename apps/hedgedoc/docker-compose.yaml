@@ -1,0 +1,25 @@
+---
+services:
+  hedgedoc:
+    image: lscr.io/linuxserver/hedgedoc:latest
+    container_name: hedgedoc
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Etc/UTC
+      - CMD_DOMAIN=md.juanponton.com
+      - CMD_URL_ADDPORT=false
+      - CMD_PROTOCOL_USESSL=true
+      - CMD_PORT=32769
+      - CMD_ALLOW_ORIGIN=['md.juanponton.com']
+      - CMD_DB_DIALECT=sqlite
+      - CMD_TRUST_PROXY=true
+      - CMD_ALLOW_EMAIL_REGISTER=false
+      - CMD_ALLOW_EMAIL=false
+      - CMD_GOOGLE_CLIENTID=${GOOGLE_CLIENT_ID}
+      - CMD_GOOGLE_CLIENTSECRET=${GOOGLE_CLIENT_SECRET}
+    volumes:
+      - ./config:/config
+    ports:
+      - "32769:32769"
+    restart: unless-stopped

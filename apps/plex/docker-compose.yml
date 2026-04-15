@@ -1,0 +1,19 @@
+services:
+  plex:
+    image: lscr.io/linuxserver/plex:latest
+    container_name: plex
+    network_mode: host                       # Uses host networking directly
+    environment:
+      - PUID=1000                            # User ID
+      - PGID=1000                            # Group ID
+      - TZ=Europe/Madrid                     # Timezone
+      - VERSION=docker                       # Docker version
+      - PLEX_CLAIM=your_claim_token          # Optional token to link your Plex server
+    volumes:
+      - ./config:/config                     # Plex configuration directory
+      - /media:/data                         # Media files path
+      - ./tmp:/tmp                           # Temporary folder
+      - ./transcode:/transcode               # Directory for transcoded files
+    devices:
+      - /dev/dri:/dev/dri                    # GPU access for hardware transcoding
+    restart: unless-stopped

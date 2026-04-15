@@ -1,0 +1,45 @@
+# Generic Home Server Template Gitignore
+
+# Docker/System Data
+**/config/*
+**/data/*
+**/database/*
+**/db/*
+**/logs/*
+**/postgres/*
+**/redis/*
+**/uploads/*
+**/backups/*
+**/downloads/*
+**/tmp/*
+**/temp/*
+**/etc-pihole/*
+**/etc-dnsmasq.d/*
+
+# Allow gitkeeps in these folders
+!**/.gitkeep
+
+# Configuration Files
+**/.env
+**/*.local
+**/settings.json
+**/*.db
+**/*.sqlite
+**/*.sqlite3
+
+# OS Files
+.DS_Store
+Thumbs.db
+*~
+*.swp
+
+# Specific Exclusions
+docker-apps/arr-stack/gluetun/
+docker-apps/arr-stack/lidarr_config/
+docker-apps/arr-stack/readarr_config/
+docker-apps/arr-stack/sonarr/config/
+docker-apps/arr-stack/radarr/config/
+docker-apps/arr-stack/prowlarr/config/
+docker-apps/arr-stack/config/
+docker-apps/immich/model-cache/
+docker-apps/overleaf-toolkit/config/*

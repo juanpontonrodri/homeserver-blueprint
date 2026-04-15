@@ -1,0 +1,47 @@
+services:
+  cleanuparr:
+    image: ghcr.io/flmorg/cleanuperr:latest
+    container_name: cleanuparr
+    restart: unless-stopped
+    volumes:
+      - ./ignored.txt:/ignored
+    environment:
+      # Timezone and general options
+      - TZ=Europe/Madrid
+      - DRY_RUN=false
+
+      # Enable only the features you need
+      - QUEUECLEANER__ENABLED=true
+      - CONTENTBLOCKER__ENABLED=true
+      - DOWNLOADCLEANER__ENABLED=true
+
+      # Ignored paths
+      - QUEUECLEANER__IGNORED_DOWNLOADS_PATH=/ignored
+      - CONTENTBLOCKER__IGNORED_DOWNLOADS_PATH=/ignored
+      - DOWNLOADCLEANER__IGNORED_DOWNLOADS_PATH=/ignored
+
+      # Download client: qBittorrent
+      - DOWNLOAD_CLIENT=qBittorrent
+      - QBITTORRENT__URL=http://${SERVER_IP}:10228
+      - QBITTORRENT__USERNAME=${QBIT_USER}
+      - QBITTORRENT__PASSWORD=${QBIT_PASS}
+
+      # Category-based cleanup in qBittorrent
+      - DOWNLOADCLEANER__CATEGORIES__0__NAME=sonarr
+      - DOWNLOADCLEANER__CATEGORIES__0__MAX_RATIO=-1
+      - DOWNLOADCLEANER__CATEGORIES__0__MIN_SEED_TIME=0
+      - DOWNLOADCLEANER__CATEGORIES__0__MAX_SEED_TIME=240
+      - DOWNLOADCLEANER__CATEGORIES__1__NAME=radarr
+      - DOWNLOADCLEANER__CATEGORIES__1__MAX_RATIO=-1
+      - DOWNLOADCLEANER__CATEGORIES__1__MIN_SEED_TIME=0
+      - DOWNLOADCLEANER__CATEGORIES__1__MAX_SEED_TIME=240
+
+      # Sonarr
+      - SONARR__ENABLED=true
+      - SONARR__INSTANCES__0__URL=http://${SERVER_IP}:8989
+      - SONARR__INSTANCES__0__APIKEY=${SONARR_API_KEY}
+
+      # Radarr
+      - RADARR__ENABLED=true
+      - RADARR__INSTANCES__0__URL=http://${SERVER_IP}:7878
+      - RADARR__INSTANCES__0__APIKEY=${RADARR_API_KEY}

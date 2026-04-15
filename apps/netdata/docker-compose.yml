@@ -1,0 +1,20 @@
+version: '3.8'
+
+services:
+  netdata:
+    image: netdata/netdata:latest
+    container_name: netdata
+    ports:
+      - "19999:19999"  # Web interface access port
+    volumes:
+      - /etc/netdata:/etc/netdata   # Netdata configuration (optional)
+      - /var/lib/netdata:/var/lib/netdata  # Persistent data files
+      - /var/log/netdata:/var/log/netdata  # Netdata logs
+      - /proc:/host/proc                 # Access host process metrics
+      - /sys:/host/sys                  # Access host system metrics
+      - /var/run/docker.sock:/var/run/docker.sock  # Monitor Docker containers
+    cap_add:
+      - SYS_PTRACE  # Advanced access for deep metrics
+    security_opt:
+      - apparmor:unconfined
+    restart: unless-stopped  # Automatically restart unless stopped

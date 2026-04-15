@@ -1,0 +1,22 @@
+version: "3.8"
+services:
+  pihole:
+    image: pihole/pihole:latest
+    container_name: pihole
+    environment:
+      TZ: "Europe/Madrid" # Change to your timezone
+      WEBPASSWORD: "${PIHOLE_PASSWORD}" # Set the password for the web interface
+      IPv6: "False"
+      FTLCONF_LOCAL_IPV4: "${SERVER_IP}"
+    volumes:
+      - ./etc-pihole:/etc/pihole
+      - ./etc-dnsmasq.d:/etc/dnsmasq.d
+      - ./log:/var/log/pihole/
+    ports:
+      - "53:53/tcp" # DNS
+      - "53:53/udp" # DNS
+      - "18080:80" # Web interface
+    restart: unless-stopped
+    # dns:
+    #   - 127.0.0.1 # Use Pi-hole as its own resolver
+    #   - 1.1.1.1 # Backup (Cloudflare)
