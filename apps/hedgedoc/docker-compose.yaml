@@ -7,11 +7,11 @@ services:
       - PUID=1000
       - PGID=1000
       - TZ=Etc/UTC
-      - CMD_DOMAIN=md.juanponton.com
+      - CMD_DOMAIN=${HEDGEDOC_DOMAIN}
       - CMD_URL_ADDPORT=false
       - CMD_PROTOCOL_USESSL=true
       - CMD_PORT=32769
-      - CMD_ALLOW_ORIGIN=['md.juanponton.com']
+      - CMD_ALLOW_ORIGIN=['${HEDGEDOC_DOMAIN}']
       - CMD_DB_DIALECT=sqlite
       - CMD_TRUST_PROXY=true
       - CMD_ALLOW_EMAIL_REGISTER=false
