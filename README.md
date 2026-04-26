@@ -82,9 +82,86 @@ Most services utilize **Environment Variables** for secrets and dynamic configur
 
 To manage the underlying complexity of a growing home server, this setup relies on several key technologies:
 
-- **Storage (MergerFS)**: Multiple physical drives are pooled into a single virtual mount point using **MergerFS**. This allows for easy media management across different disks without the overhead of traditional RAID, while remaining flexible to add or remove drives.
+- **Storage ([MergerFS](https://github.com/trapexit/mergerfs))**: Multiple physical drives are pooled into a single virtual mount point using [MergerFS](https://github.com/trapexit/mergerfs). This allows for easy media management across different disks without the overhead of traditional RAID, while remaining flexible to add or remove drives.
 - **Remote Access (ZeroTier)**: A secure, peer-to-peer VPN provided by **ZeroTier** allows for seamless access to the entire local network from any device, anywhere in the world, as if they were on the same physical switch.
 - **External Exposure (Cloudflare Tunnels)**: Specific services are exposed to the internet via **Cloudflare Tunnels**. This provides a secure way to share services publicly without opening ports on the router or managing local SSL certificates.
+
+### 🔄 Architecture & Workflows
+
+#### 🎬 Media Lifecycle (Arr Stack)
+This diagram illustrates how media is requested, downloaded, and served. All download traffic is strictly routed through **Gluetun VPN** for privacy.
+
+```mermaid
+graph LR
+    subgraph "Discovery & Request"
+        Plex[Plex Watchlist]
+        Overseerr[Overseerr]
+    end
+
+    subgraph "Management (Arr Stack)"
+        Sonarr[Sonarr / Radarr]
+    end
+
+    subgraph "Secure Download"
+        Gluetun[Gluetun VPN]
+        Torrent[Download Client]
+    end
+
+    subgraph "Storage & Playback"
+        Storage[(Media Storage)]
+        PlexServer[Plex Media Server]
+    end
+
+    Plex -->|Auto-Sync| Overseerr
+    Overseerr -->|Request Movie/TV| Sonarr
+    Sonarr -->|Search & Grab| Torrent
+    Torrent -.->|All Traffic| Gluetun
+    Gluetun -->|Secure Exit| Internet((Internet))
+    Torrent -->|Download Complete| Storage
+    Storage -->|Library Scan| PlexServer
+    PlexServer -->|Notify| Plex
+```
+
+#### 🌐 External Exposure (Cloudflare Tunnels)
+Securely accessing local services from the outside world without opening any router ports.
+
+```mermaid
+graph TD
+    User((Remote User)) -->|HTTPS| CF[Cloudflare Edge]
+    subgraph "Local Home Server"
+        Tunnel[Cloudflared Tunnel]
+        Service1[Plex]
+        Service2[Overseerr]
+        Service3[Others...]
+    end
+    CF <-->|Encrypted Tunnel| Tunnel
+    Tunnel --> Service1
+    Tunnel --> Service2
+    Tunnel --> Service3
+```
+
+#### 💾 Storage Pooling ([MergerFS](https://github.com/trapexit/mergerfs))
+How multiple physical drives are presented as a single, unified filesystem for all containers.
+
+```mermaid
+graph TD
+    subgraph "Physical Hardware"
+        D1[HDD 1 /mnt/disk1]
+        D2[HDD 2 /mnt/disk2]
+        D3[HDD 3 /mnt/disk3]
+    end
+    
+    D1 & D2 & D3 --> MFS["MergerFS Layer"]
+    
+    MFS --> VMP["/mnt/storage (Virtual Pool)"]
+    
+    subgraph "Applications"
+        VMP --> P[Plex]
+        VMP --> R[Radarr]
+        VMP --> S[Sonarr]
+    end
+```
+
 
 ---
 
